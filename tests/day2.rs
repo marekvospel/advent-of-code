@@ -1,7 +1,7 @@
 use advent_of_code::{get_input, Result};
 
-use advent_of_code::AOCRunnable;
 use advent_of_code::day2::AOCDay;
+use advent_of_code::AOCRunnable;
 
 #[test]
 fn run_day2_test() -> Result<()> {
@@ -9,10 +9,9 @@ fn run_day2_test() -> Result<()> {
     let result = AOCDay::run_pt1(input.clone());
     println!("Result: {}", result);
     assert_eq!(result, "15");
-    return Ok(());
     let result = AOCDay::run_pt2(input);
     println!("Result: {}", result);
-    assert_eq!(result, "45000");
+    assert_eq!(result, "12");
     Ok(())
 }
 
@@ -21,10 +20,9 @@ fn run_day2() -> Result<()> {
     let input = get_input("day2.txt")?;
     let result = AOCDay::run_pt1(input.clone());
     println!("Result: {}", result);
-    assert_eq!(result, "");
-    return Ok(());
+    assert_eq!(result, "15572");
     let result = AOCDay::run_pt2(input);
     println!("Result: {}", result);
-    assert_eq!(result, "");
+    assert_eq!(result, "16098");
     Ok(())
 }
