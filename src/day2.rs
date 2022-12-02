@@ -1,4 +1,4 @@
-use crate::{AOCResult, AOCRunnable};
+use crate::{AOCError, AOCResult, AOCRunnable};
 
 pub struct AOCDay;
 
@@ -7,7 +7,6 @@ enum Shape {
     Rock,
     Paper,
     Scissors,
-    None,
 }
 
 #[derive(Clone, Debug)]
@@ -15,23 +14,28 @@ enum GameResult {
     Lose(Shape),
     Draw(Shape),
     Win(Shape),
-    None,
 }
 
 impl GameResult {
-    fn from_result(value: char, opponent: Shape) -> Self {
-        match value {
+    fn from_result(value: char, opponent: Shape) -> AOCResult<Self> {
+        Ok(match value {
             'X' => GameResult::Lose(opponent),
             'Y' => GameResult::Draw(opponent),
             'Z' => GameResult::Win(opponent),
-            _ => GameResult::None,
-        }
+            c => {
+                return Err(AOCError::ParseError(
+                    format!("There is no game result for char \"{}\"", c).into(),
+                ))
+            }
+        })
     }
 }
 
-impl From<char> for Shape {
-    fn from(value: char) -> Self {
-        match value {
+impl TryFrom<char> for Shape {
+    type Error = AOCError;
+
+    fn try_from(value: char) -> Result<Self, Self::Error> {
+        Ok(match value {
             'A' => Shape::Rock,
             'B' => Shape::Paper,
             'C' => Shape::Scissors,
@@ -39,8 +43,12 @@ impl From<char> for Shape {
             'X' => Shape::Rock,
             'Y' => Shape::Paper,
             'Z' => Shape::Scissors,
-            _ => Shape::None,
-        }
+            c => {
+                return Err(AOCError::ParseError(
+                    format!("There is no shape for char \"{}\"", c).into(),
+                ))
+            }
+        })
     }
 }
 
@@ -51,21 +59,17 @@ impl From<GameResult> for Shape {
                 Shape::Rock => Shape::Paper,
                 Shape::Scissors => Shape::Rock,
                 Shape::Paper => Shape::Scissors,
-                Shape::None => Shape::None,
             },
             GameResult::Draw(shape) => match shape {
                 Shape::Rock => Shape::Rock,
                 Shape::Scissors => Shape::Scissors,
                 Shape::Paper => Shape::Paper,
-                Shape::None => Shape::None,
             },
             GameResult::Lose(shape) => match shape {
                 Shape::Rock => Shape::Scissors,
                 Shape::Scissors => Shape::Paper,
                 Shape::Paper => Shape::Rock,
-                Shape::None => Shape::None,
             },
-            GameResult::None => Shape::None,
         }
     }
 }
@@ -76,7 +80,6 @@ impl Shape {
             Shape::Rock => 1,
             Shape::Paper => 2,
             Shape::Scissors => 3,
-            Shape::None => 0,
         }
     }
 }
@@ -87,21 +90,17 @@ fn compare<S: Into<Shape>>(my: S, opponent: S) -> i32 {
             Shape::Rock => 3,
             Shape::Paper => 0,
             Shape::Scissors => 6,
-            Shape::None => 0,
         },
         Shape::Paper => match opponent.into() {
             Shape::Rock => 6,
             Shape::Paper => 3,
             Shape::Scissors => 0,
-            Shape::None => 0,
         },
         Shape::Scissors => match opponent.into() {
             Shape::Rock => 0,
             Shape::Paper => 6,
             Shape::Scissors => 3,
-            Shape::None => 0,
         },
-        Shape::None => 0,
     }
 }
 
@@ -112,13 +111,10 @@ impl AOCRunnable for AOCDay {
             .split('\n')
             .filter_map(|s| {
                 let mut split = s.chars();
-                if split.clone().collect::<Vec<char>>().len() < 2 {
-                    return None;
-                }
 
                 Some((
-                    Shape::from(split.next().unwrap()),
-                    Shape::from(split.nth(1).unwrap()),
+                    Shape::try_from(split.next()?).unwrap(),
+                    Shape::try_from(split.nth(1)?).unwrap(),
                 ))
             })
             .collect();
@@ -146,11 +142,11 @@ impl AOCRunnable for AOCDay {
                     return None;
                 }
 
-                let opponent = Shape::from(split.next().unwrap());
+                let opponent = Shape::try_from(split.next()?).unwrap();
 
                 Some((
                     opponent.clone(),
-                    Shape::from(GameResult::from_result(split.nth(1).unwrap(), opponent)),
+                    Shape::from(GameResult::from_result(split.nth(1)?, opponent).unwrap()),
                 ))
             })
             .collect();

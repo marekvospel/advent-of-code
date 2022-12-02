@@ -16,6 +16,8 @@ pub enum AOCError {
     IoError(#[from] std::io::Error),
     #[error("There was an error while parsing an integer: {0}")]
     ParseIntError(#[from] std::num::ParseIntError),
+    #[error("There was an error while parsing challenge input")]
+    ParseError(String),
 }
 
 pub type Result<T> = std::result::Result<T, AOCError>;
