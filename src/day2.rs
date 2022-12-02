@@ -1,4 +1,4 @@
-use crate::AOCRunnable;
+use crate::{AOCResult, AOCRunnable};
 
 pub struct AOCDay;
 
@@ -106,7 +106,7 @@ fn compare<S: Into<Shape>>(my: S, opponent: S) -> i32 {
 }
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> String {
+    fn run_pt1(input: String) -> AOCResult<String> {
         // First in tuple is opponent, second is me
         let matches: Vec<(Shape, Shape)> = input
             .split('\n')
@@ -133,10 +133,10 @@ impl AOCRunnable for AOCDay {
 
         let result = score + play_score;
 
-        result.to_string()
+        Ok(result.to_string())
     }
 
-    fn run_pt2(input: String) -> String {
+    fn run_pt2(input: String) -> AOCResult<String> {
         // First in tuple is opponent, second is me
         let matches: Vec<(Shape, Shape)> = input
             .split('\n')
@@ -165,6 +165,6 @@ impl AOCRunnable for AOCDay {
 
         let result = score + play_score;
 
-        result.to_string()
+        Ok(result.to_string())
     }
 }
