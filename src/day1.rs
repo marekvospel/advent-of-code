@@ -1,8 +1,8 @@
 use crate::AOCRunnable;
 
-pub struct Day1 {}
+pub struct AOCDay {}
 
-impl AOCRunnable for Day1 {
+impl AOCRunnable for AOCDay {
     fn run_pt1(input: String) -> String {
         // Each index is inventory of one elf
         let elves_split: Vec<String> = input.split("\n\n").map(|s| s.to_string()).collect();

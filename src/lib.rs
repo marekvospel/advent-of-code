@@ -2,6 +2,7 @@ use std::fs::read_to_string;
 use std::path::PathBuf;
 
 pub mod day1;
+pub mod day2;
 
 pub trait AOCRunnable {
     fn run_pt1(input: String) -> String;
