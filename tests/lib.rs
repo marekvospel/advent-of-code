@@ -6,5 +6,3 @@ fn get_input_should_get_test_input() -> Result<()> {
     assert_eq!(input, "123456789\n".to_string());
     Ok(())
 }
-
-// mod day1;
