@@ -8,6 +8,7 @@ pub mod day3;
 pub mod day4;
 pub mod day5;
 pub mod day6;
+pub mod day7;
 
 pub trait AOCRunnable {
     fn run_pt1(input: String) -> AOCResult<String>;
