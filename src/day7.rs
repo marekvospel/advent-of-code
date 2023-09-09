@@ -1,6 +1,5 @@
 use crate::{AOCResult, AOCRunnable};
-use std::ffi::OsStr;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 pub struct AOCDay;
 
@@ -24,38 +23,51 @@ impl FsDirectory {
         }
     }
 
-    fn create_file(&mut self, dir: String, file: FsFile) -> FsNode {
-        let path = Path::new(dir.as_str());
+    fn create_file(&mut self, dir: &str, file: FsFile) -> FsNode {
+        let parts = dir.split("/");
 
-        for i in 0..path.iter().count() {
-            let file_path = path.iter().nth(i).unwrap();
-            let traversed = path.iter().skip(i + 1).collect::<Vec<&OsStr>>();
-            let traversed_path = traversed.join("/".as_ref()).to_string_lossy().to_string();
-            if file_path == "/" {
-                continue;
-            }
+        // No other directories to create, create file
+        if dir == "/" || dir == "" {
+            self.children.push(FsNode::File(file.clone()));
+            FsNode::File(file)
+        // Traverse directories and recurse
+        } else {
+            let path: Vec<&str> = parts
+                .skip(match dir.starts_with("/") {
+                    true => 1,
+                    false => 0,
+                })
+                .collect();
+            let dirname = path.first().unwrap();
+            let next = path
+                .iter()
+                .skip(1)
+                .map(|s| s.to_owned())
+                .collect::<Vec<&str>>()
+                .join("/");
 
-            for cld in self.children.iter_mut() {
-                if let FsNode::Directory(mut child) = cld.clone() {
-                    if child.name == file_path.to_string_lossy() {
-                        child
-                            .children
-                            .push(child.clone().create_file(traversed_path, file));
-                        *cld = FsNode::Directory(child);
-                        return cld.clone();
-                    }
+            // Directory exists
+            if let Some(FsNode::Directory(dir)) = self.children.iter_mut().find(|d| match d {
+                FsNode::Directory(d) => &d.name == dirname,
+                _ => false,
+            }) {
+                dir.create_file(&next, file)
+            } else {
+                self.children.push(FsNode::Directory(FsDirectory {
+                    name: dirname.to_string(),
+                    children: vec![],
+                }));
+
+                if let Some(FsNode::Directory(dir)) = self.children.iter_mut().find(|d| match d {
+                    FsNode::Directory(d) => &d.name == dirname,
+                    _ => false,
+                }) {
+                    dir.create_file(&next, file)
+                } else {
+                    unimplemented!()
                 }
             }
-
-            let mut child = FsDirectory::new(file_path.to_string_lossy());
-            child.create_file(traversed_path, file);
-            self.children.push(FsNode::Directory(child.clone()));
-            return FsNode::Directory(child);
         }
-
-        let file = FsNode::File(file);
-        self.children.push(file.clone());
-        file
     }
 
     fn calc_size(&self) -> i32 {
@@ -85,6 +97,28 @@ impl FsDirectory {
                     result += size;
                 }
                 result += dir.find_pt1();
+            }
+        }
+
+        result
+    }
+
+    fn find_pt2(&self, needed: i32) -> i32 {
+        let mut result = i32::MAX;
+
+        for child in self.children.iter() {
+            if let FsNode::Directory(dir) = child {
+                let size = dir.calc_size();
+                println!("{}: {size}", dir.name);
+                if size > needed && size < result {
+                    println!("Setting A");
+                    result = size;
+                }
+                let size = dir.find_pt2(needed);
+                if size > needed && size < result {
+                    println!("Setting B");
+                    result = size;
+                }
             }
         }
 
@@ -141,7 +175,7 @@ impl FsDirectory {
                         name: file_name.clone(),
                         size: line.split(' ').next().unwrap().parse::<i32>().unwrap(),
                     };
-                    current_fs.create_file(cwd.to_string_lossy().to_string(), file);
+                    current_fs.create_file(&cwd.to_string_lossy(), file);
                 }
             }
         }
@@ -159,12 +193,18 @@ impl AOCRunnable for AOCDay {
 
         let fs = FsDirectory::parse(input);
 
-        // println!("{:#?}", fs);
-
         Ok(fs.find_pt1().to_string())
     }
 
     fn run_pt2(input: String) -> AOCResult<String> {
-        todo!()
+        let input = input
+            .split('\n')
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>();
+
+        let fs = FsDirectory::parse(input);
+        let free = 30000000 - (70000000 - fs.calc_size());
+
+        Ok(fs.find_pt2(free).to_string())
     }
 }

@@ -11,7 +11,7 @@ fn run_day7_test() -> Result<()> {
     assert_eq!(result, "95437");
     let result = AOCDay::run_pt2(input)?;
     println!("Result: {}", result);
-    assert_eq!(result, "");
+    assert_eq!(result, "24933642");
     Ok(())
 }
 
@@ -20,9 +20,9 @@ fn run_day7() -> Result<()> {
     let input = get_input("day7.txt")?;
     let result = AOCDay::run_pt1(input.clone())?;
     println!("Result: {}", result);
-    assert_eq!(result, "");
+    assert_eq!(result, "2104783");
     let result = AOCDay::run_pt2(input)?;
     println!("Result: {}", result);
-    assert_eq!(result, "");
+    assert_eq!(result, "5883165");
     Ok(())
 }
