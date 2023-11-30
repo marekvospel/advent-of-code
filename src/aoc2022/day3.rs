@@ -1,4 +1,5 @@
-use crate::{AOCResult, AOCRunnable};
+use crate::AOCRunnable;
+use anyhow::Result;
 
 pub struct AOCDay;
 
@@ -62,7 +63,7 @@ fn char_value(c: char) -> i32 {
 }
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> AOCResult<String> {
+    fn run_pt1(input: String) -> Result<String> {
         let bags = input.split('\n').map(Bag::new).collect::<Vec<Bag>>();
 
         let result: i32 = bags.iter().map(|bag| bag.get_common()).sum();
@@ -70,7 +71,7 @@ impl AOCRunnable for AOCDay {
         Ok(result.to_string())
     }
 
-    fn run_pt2(input: String) -> AOCResult<String> {
+    fn run_pt2(input: String) -> Result<String> {
         let bags = input.split('\n').map(Bag::new).collect::<Vec<Bag>>();
 
         let mut groups = Vec::new();

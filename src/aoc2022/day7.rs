@@ -1,4 +1,5 @@
-use crate::{AOCResult, AOCRunnable};
+use crate::AOCRunnable;
+use anyhow::Result;
 use std::path::PathBuf;
 
 pub struct AOCDay;
@@ -185,7 +186,7 @@ impl FsDirectory {
 }
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> AOCResult<String> {
+    fn run_pt1(input: String) -> Result<String> {
         let input = input
             .split('\n')
             .map(|s| s.to_string())
@@ -196,7 +197,7 @@ impl AOCRunnable for AOCDay {
         Ok(fs.find_pt1().to_string())
     }
 
-    fn run_pt2(input: String) -> AOCResult<String> {
+    fn run_pt2(input: String) -> Result<String> {
         let input = input
             .split('\n')
             .map(|s| s.to_string())

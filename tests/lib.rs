@@ -1,4 +1,5 @@
-use advent_of_code::{get_input, Result};
+use advent_of_code::get_input;
+use anyhow::Result;
 
 #[test]
 fn get_input_should_get_test_input() -> Result<()> {

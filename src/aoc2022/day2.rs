@@ -1,4 +1,5 @@
-use crate::{AOCError, AOCResult, AOCRunnable};
+use crate::AOCRunnable;
+use anyhow::{anyhow, Result};
 
 pub struct AOCDay;
 
@@ -17,22 +18,18 @@ enum GameResult {
 }
 
 impl GameResult {
-    fn from_result(value: char, opponent: Shape) -> AOCResult<Self> {
+    fn from_result(value: char, opponent: Shape) -> Result<Self> {
         Ok(match value {
             'X' => GameResult::Lose(opponent),
             'Y' => GameResult::Draw(opponent),
             'Z' => GameResult::Win(opponent),
-            c => {
-                return Err(AOCError::ParseError(
-                    format!("There is no game result for char \"{}\"", c).into(),
-                ))
-            }
+            c => return Err(anyhow!("There is no game result for char \"{}\"", c).into()),
         })
     }
 }
 
 impl TryFrom<char> for Shape {
-    type Error = AOCError;
+    type Error = anyhow::Error;
 
     fn try_from(value: char) -> Result<Self, Self::Error> {
         Ok(match value {
@@ -43,11 +40,7 @@ impl TryFrom<char> for Shape {
             'X' => Shape::Rock,
             'Y' => Shape::Paper,
             'Z' => Shape::Scissors,
-            c => {
-                return Err(AOCError::ParseError(
-                    format!("There is no shape for char \"{}\"", c).into(),
-                ))
-            }
+            c => return Err(anyhow!("There is no shape for char \"{}\"", c).into()),
         })
     }
 }
@@ -105,7 +98,7 @@ fn compare<S: Into<Shape>>(my: S, opponent: S) -> i32 {
 }
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> AOCResult<String> {
+    fn run_pt1(input: String) -> Result<String> {
         // First in tuple is opponent, second is me
         let matches: Vec<(Shape, Shape)> = input
             .split('\n')
@@ -132,7 +125,7 @@ impl AOCRunnable for AOCDay {
         Ok(result.to_string())
     }
 
-    fn run_pt2(input: String) -> AOCResult<String> {
+    fn run_pt2(input: String) -> Result<String> {
         // First in tuple is opponent, second is me
         let matches: Vec<(Shape, Shape)> = input
             .split('\n')

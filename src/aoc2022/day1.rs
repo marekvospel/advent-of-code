@@ -1,8 +1,9 @@
-use crate::{AOCError, AOCResult, AOCRunnable};
+use crate::AOCRunnable;
+use anyhow::Result;
 
 pub struct AOCDay {}
 
-fn run(input: String) -> AOCResult<Vec<i32>> {
+fn run(input: String) -> Result<Vec<i32>> {
     // Each index is inventory of one elf
     let elves_split: Vec<String> = input.split("\n\n").map(|s| s.to_string()).collect();
 
@@ -14,7 +15,7 @@ fn run(input: String) -> AOCResult<Vec<i32>> {
         let mut elf_cals = 0;
         let _ = elf.split('\n').try_for_each(|i| {
             elf_cals += i.parse::<i32>()?;
-            Ok::<(), AOCError>(())
+            Ok::<(), anyhow::Error>(())
         });
         if elf_cals == 0 {
             continue;
@@ -28,7 +29,7 @@ fn run(input: String) -> AOCResult<Vec<i32>> {
 }
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> AOCResult<String> {
+    fn run_pt1(input: String) -> Result<String> {
         let elves_calories = run(input)?;
 
         println!("Most calories: {}", elves_calories.first().unwrap_or(&0));
@@ -37,7 +38,7 @@ impl AOCRunnable for AOCDay {
         Ok(elves_calories.first().unwrap_or(&0).to_string())
     }
 
-    fn run_pt2(input: String) -> AOCResult<String> {
+    fn run_pt2(input: String) -> Result<String> {
         let elves_calories = run(input)?;
 
         println!("Most calories: {}", elves_calories.first().unwrap_or(&0));

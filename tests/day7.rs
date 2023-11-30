@@ -1,6 +1,7 @@
-use advent_of_code::{get_input, Result};
+use advent_of_code::aoc2022::day7::AOCDay;
+use advent_of_code::get_input;
+use anyhow::Result;
 
-use advent_of_code::day7::AOCDay;
 use advent_of_code::AOCRunnable;
 
 #[test]

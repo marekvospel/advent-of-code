@@ -1,4 +1,5 @@
-use crate::{AOCResult, AOCRunnable};
+use crate::AOCRunnable;
+use anyhow::Result;
 
 pub struct AOCDay;
 
@@ -54,7 +55,7 @@ impl Pile {
 }
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> AOCResult<String> {
+    fn run_pt1(input: String) -> Result<String> {
         let input: Vec<String> = input.split("\n\n").map(|s| s.to_string()).collect();
 
         let schema = input.first().expect("schema should exist");
@@ -138,7 +139,7 @@ impl AOCRunnable for AOCDay {
         Ok(result.iter().map(|c| c.identifier).collect::<String>())
     }
 
-    fn run_pt2(input: String) -> AOCResult<String> {
+    fn run_pt2(input: String) -> Result<String> {
         let input: Vec<String> = input.split("\n\n").map(|s| s.to_string()).collect();
 
         let schema = input.first().expect("schema should exist");

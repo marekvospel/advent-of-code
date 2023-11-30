@@ -1,9 +1,10 @@
-use crate::{AOCResult, AOCRunnable};
+use crate::AOCRunnable;
+use anyhow::Result;
 
 pub struct AOCDay;
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> AOCResult<String> {
+    fn run_pt1(input: String) -> Result<String> {
         let chars = input.chars().collect::<Vec<char>>();
 
         for i in 4..chars.len() {
@@ -25,7 +26,7 @@ impl AOCRunnable for AOCDay {
         Ok((-1).to_string())
     }
 
-    fn run_pt2(input: String) -> AOCResult<String> {
+    fn run_pt2(input: String) -> Result<String> {
         let chars = input.chars().collect::<Vec<char>>();
 
         for i in 14..chars.len() {

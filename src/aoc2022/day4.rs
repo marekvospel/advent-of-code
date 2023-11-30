@@ -1,4 +1,5 @@
-use crate::{AOCResult, AOCRunnable};
+use crate::AOCRunnable;
+use anyhow::Result;
 use std::num::ParseIntError;
 use std::ops::RangeInclusive;
 
@@ -27,7 +28,7 @@ fn overlapping_any(mut a: RangeInclusive<i32>, mut b: RangeInclusive<i32>) -> bo
 }
 
 impl AOCRunnable for AOCDay {
-    fn run_pt1(input: String) -> AOCResult<String> {
+    fn run_pt1(input: String) -> Result<String> {
         let pairs = input.split('\n').filter_map(|line| {
             let split = line.split(',');
 
@@ -49,7 +50,7 @@ impl AOCRunnable for AOCDay {
         Ok(pairs.count().to_string())
     }
 
-    fn run_pt2(input: String) -> AOCResult<String> {
+    fn run_pt2(input: String) -> Result<String> {
         let pairs = input.split('\n').filter_map(|line| {
             let split = line.split(',');
 
