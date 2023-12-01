@@ -65,10 +65,6 @@ impl AOCRunnable for AOCDay {
                 mapper(&mut last, &current, true);
             }
 
-            println!("First {first:?}");
-            println!("Last {last:?}");
-            println!("Line {line:?}");
-
             let combined = format!("{}{}", first.unwrap(), last.unwrap());
             let num = combined.parse::<i32>().unwrap();
             sum += num;
