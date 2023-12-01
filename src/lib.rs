@@ -4,6 +4,7 @@ use std::path::PathBuf;
 extern crate anyhow;
 
 pub mod aoc2022;
+pub mod aoc2023;
 
 pub trait AOCRunnable {
     fn run_pt1(input: String) -> anyhow::Result<String>;
