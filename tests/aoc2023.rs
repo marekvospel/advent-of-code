@@ -9,3 +9,4 @@ test_day!(2023, 5);
 test_day!(2023, 6);
 test_day!(2023, 7);
 test_day!(2023, 8);
+test_day!(2023, 9);
