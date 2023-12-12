@@ -239,7 +239,7 @@ impl Piece {
         false
     }
 
-    fn find_starting(&self, pieces: &Vec<Vec<Piece>>) -> Self {
+    fn find_starting(&self, _pieces: &Vec<Vec<Piece>>) -> Self {
         Self::TB
     }
 }
